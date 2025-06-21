@@ -1,0 +1,200 @@
+body {
+  /* background-color: #f7f9fc; */
+  background-color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+h4{
+color: #003366;
+}
+
+.card {
+  border: none;
+  border-radius: 1rem;
+  /* box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06); */
+}
+
+.card-header {
+  background-color: #ffffff;
+  border-bottom: none;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #000000;
+  padding: 1.5rem 2rem 1rem;
+  text-align: left;
+}
+
+
+
+/* Tablle */
+
+.table-container{
+max-height: 800px;
+
+/* overflow-y: auto; */
+}
+
+
+.table {
+width: 100%;
+border-collapse: collapse;
+}
+
+.table th,
+.table td {
+border: 1px solid black;
+padding: 1rem;
+font-size: 0.95rem;
+text-align: center;
+vertical-align: middle;
+}
+
+.table thead th {
+background-color: #ffffff;
+color: #009688; //Table title color
+font-weight: 600;
+}
+
+.table tbody tr:hover {
+background-color: #f1fdfc;
+}
+
+
+
+/* Pagnation Style */
+.pagination-btn {
+border: 1px solid #009688;
+color: #009688;
+background-color: #ffffff;
+transition: all 0.2s ease;
+}
+
+.pagination-btn:hover {
+background-color: #e0f2f1;
+color: #004d40;
+border-color: #004d40;
+}
+
+.pagination-btn.active {
+background-color: #009688;
+color: #ffffff;
+border-color: #009688;
+}
+
+
+#logoutBtn {
+padding: 0.5rem 1rem;
+font-weight: 600;
+font-size: 0.95rem;
+border-radius: 0.5rem;
+transition: all 0.3s ease;
+border-width:  2px;
+border-color: black;
+color: black;
+}
+
+#logoutBtn:hover {
+background-color: #000000; /* Bootstrap danger color */
+color: white;
+
+}
+
+
+/* Responsive View */
+
+@media (max-width: 769px){
+.card{
+margin: 0 1rem;
+
+}
+
+.table thead th,
+.table tbody td{
+font-size: 0.85rem;
+padding: 0.5rem;
+}
+
+
+.card-header {
+font-size: 1.3rem;
+text-align: center;
+}
+
+}
+
+
+/* Universal container padding fix for all screen sizes */
+.container {
+padding-left: 1rem;
+padding-right: 1rem;
+}
+
+/* Responsive Layout Breakpoints */
+@media (max-width: 1200px) {
+.card {
+margin: 0 auto;
+padding: 1.5rem;
+}
+}
+
+@media (max-width: 992px) {
+.card-header {
+font-size: 1.4rem;
+text-align: center;
+}
+
+.table th,
+.table td {
+font-size: 0.9rem;
+padding: 0.75rem;
+}
+}
+
+@media (max-width: 768px) {
+.card {
+margin: 0 auto;
+padding: 1rem;
+}
+
+.table th,
+.table td {
+font-size: 0.8rem;
+padding: 0.6rem;
+}
+
+.card-header {
+font-size: 1.2rem;
+}
+
+header img {
+height: 45px;
+}
+
+#logoutBtn {
+padding: 0.25rem 0.75rem;
+font-size: 0.875rem;
+}
+}
+
+@media (max-width: 576px) {
+.card {
+margin: 0 auto;
+padding: 0.75rem;
+}
+
+.table th,
+.table td {
+font-size: 0.75rem;
+padding: 0.5rem;
+}
+
+.card-header {
+font-size: 1.1rem;
+}
+
+header {
+flex-direction: column;
+gap: 0.5rem;
+text-align: center;
+}
+}

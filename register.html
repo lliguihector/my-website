@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="CSS/style.css"/>
+  <style>
+
+  body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: url('images/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+  }
+
+
+
+</style>
+
+</head>
+<body>
+
+
+  <header class="w-100  py-3 px-4 d-flex align-items-center justify-content-between flex-wrap">
+    <!-- Left Logo -->
+    <a href="index.html">
+    <img src="images/logo.jpg" alt="Logo" class="logo-img"/>
+  </a>
+  </header>
+
+
+
+
+  <div class="container  d-flex flex-column align-items-center justify-content-center ">
+
+  <!-- <form class="form-wrapper p-4 border rounded shadow-sm bg-white" id="registerForm"> -->
+  <form class="form-wrapper p-4" id="registerForm">
+
+    <h2 class="text-center mb-4">Registration </h2>
+
+
+<!-- First Name -->
+    <div class="mb-4">
+      <div class="input-group position-relative" id="firstNameGroup">
+    <span class="input-group-text bg-white border-end-0">
+      <i class="bi bi-person form-icon"></i>
+    </span>
+    <input type="text" class="form-control border-start-0" id="firstName" placeholder="First Name" required>
+    <span class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3" >
+      <i class="bi bi-check-circle-fill"></i>
+    </span>
+  </div>
+    <div class="error-message" id="firstNameError">First name is required.</div>
+    </div>
+
+
+<!-- Last Name -->
+    <div class="mb-4">
+      <div class="input-group position-relative" id="lastNameGroup" >
+        <span class="input-group-text bg-white border-end-0" >
+          <i class="bi bi-person-vcard form-icon"></i>
+        </span>
+        <input type="text" class="form-control border-start-0" id="lastName" placeholder="Last Name" required>
+        <span class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3">
+  <i class="bi bi-check-circle-fill"></i>
+</span>
+
+      </div>
+        <div class="error-message" id="lastNameError">Last name is required.</div>
+    </div>
+
+<!-- Email -->
+    <div class="mb-4">
+      <div class="input-group position-relative" id="emailGroup">
+        <span class="input-group-text bg-white border-end-0">
+          <i class="bi bi-envelope form-icon"></i>
+        </span>
+        <input type="email" class="form-control border-start-0" id="email" placeholder="Email Address" required>
+        <span class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3">
+  <i class="bi bi-check-circle-fill"></i>
+</span>
+
+      </div>
+      <div class="error-message" id="emailError">E-mail is required.</div>
+    </div>
+
+<!-- Phone Number -->
+    <div class="mb-5">
+      <div class="input-group position-relative" id="phoneGroup">
+        <span class="input-group-text bg-white border-end-0">
+          <i class="bi bi-telephone form-icon"></i>
+        </span>
+        <input type="tel" class="form-control border-start-0" id="phone" placeholder="Phone Number" required>
+        <span class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3">
+  <i class="bi bi-check-circle-fill"></i>
+</span>
+
+      </div>
+      <div class="error-message" id="phoneError">Phone Number is required.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 mb-2">Submit</button>
+    <!-- Register Link -->
+    <div class="text-center mt-3">
+      <a href="login.html" class="text-decoration-none text-primary">Log in to view!</a>
+    </div>
+  </form>
+
+</div>
+<!-- Script Tag-->
+<script type="module" src="JS/script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="CSS/style.css"/>
+
+<style>
+  html, body {
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+  }
+  </style>
+</head>
+<body>
+
+
+    <!-- LOGO BANNER ON TOP -->
+    <div class="logo-banner">
+      <img src="images/logo.jpg" alt="Logo" class="logo-img" />
+    </div>
+
+    <!-- Main content with two panels -->
+    <div class="main-content">
+      <div class="left-panel">
+        <h1 id="welcome-text">Welcome</h1>
+        <p id="sign-in-text">Please sign in here</p>
+
+        <div class="start-container">
+          <a href="register.html" class="start-button" >
+            <i class="bi bi-check-circle"></i>
+            <span id="start-button-text">Start Here</span>
+          </a>
+
+          <div class="divider-text">
+            <div class="vertical-line"></div>
+            <span id="qr-text">Scan QR Code to visit our website.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="header">
+          <span class="header-title" id="language-label">Español</span>
+        <button class="toggle-button" onclick="toggleLanguage()"></button>
+        </div>
+        <img src="images/qr-code.jpg" alt="QR Code" class="qr-image" />
+      </div>
+    </div>
+
+
+    <script>
+
+      let isSpanish = true;
+
+      function toggleLanguage() {
+        const button = document.querySelector('.toggle-button');
+        const welcomeText = document.getElementById('welcome-text');
+
+        if (isSpanish) {
+          document.getElementById('language-label').textContent = 'English';
+          welcomeText.textContent = 'Bienvenido';
+          document.getElementById('sign-in-text').textContent = 'Por favor inicie sesión aquí';
+          document.getElementById('start-button-text').textContent = 'Comenzar';
+          document.getElementById('qr-text').textContent = 'Escanee el código QR para visitar nuestro sitio web.';
+          button.classList.add('active');
+        } else {
+          document.getElementById('language-label').textContent = 'Español';
+          welcomeText.textContent = 'Welcome';
+          document.getElementById('sign-in-text').textContent = 'Please sign in here';
+          document.getElementById('start-button-text').textContent = 'Start Here';
+          document.getElementById('qr-text').textContent = 'Scan QR Code to visit our website.';
+          button.classList.remove('active');
+        }
+
+        isSpanish = !isSpanish;
+      }
+
+
+
+    </script>
+</body>
+</html>
