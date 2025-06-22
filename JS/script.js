@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // submitToFirebase();
 
         testForm()
+                submitToFirebase()
       }
     });
 
