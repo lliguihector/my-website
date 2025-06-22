@@ -75,10 +75,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const isPhoneValid = validateField("phone", v => /^[0-9]{10}$/.test(v), "Phone must be 10 digits.");
 
       if (isFirstNameValid && isLastNameValid && isEmailValid && isPhoneValid) {
-        // submitToFirebase();
+        submitToFirebase();
 
-        testForm()
-                submitToFirebase()
+
+              
       }
     });
 
