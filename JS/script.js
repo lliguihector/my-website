@@ -120,7 +120,7 @@ function testForm(){
     const input = document.getElementById(id);
     const value = input.value.trim();
     const group = input.closest(".input-group");
-
+  console.log("Input value: ", value); // Debug: Check value being validated
     if (!testFn(value)) {
       group?.classList.remove("input-valid");
       group?.classList.add("input-invalid");
