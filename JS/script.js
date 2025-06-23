@@ -129,12 +129,14 @@ console.log("Validation failed."); // Debug: Check why it's failing
       group?.classList.remove("input-valid");
       group?.classList.add("input-invalid");
       input.setCustomValidity(errorMessage);
+      input.reportValidity();
       return false;
     } else {
 console.log("Validation succeeded."); // Debug: Check when validation passes      
       group?.classList.remove("input-invalid");
       group?.classList.add("input-valid");
       input.setCustomValidity("");
+      input.reportValidity();
       return true;
     }
   }
