@@ -281,6 +281,9 @@ height: calc(100vh - 200px); /* Subtract the banner height */
     display: none;
     pointer-events: none;
   }
+  .checkmark-icon.visible{
+    display: inline;;
+  }
 
   /* Show checkmark when valid */
   .input-valid .checkmark-icon {
