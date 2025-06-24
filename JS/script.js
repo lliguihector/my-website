@@ -57,8 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "clients.html";
       }
     });
-  
   }
+
   /*============================
           register.html
   ==============================*/
@@ -66,130 +66,77 @@ document.addEventListener("DOMContentLoaded", () => {
   if (registerForm) {
 
 
-function submitToFirebase() {
-  const firstname = document.getElementById("firstName").value.trim();
-  const lastname = document.getElementById("lastName").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("phone").value.trim();
+    registerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
 
-  addDoc(collection(db, "clients"), {
-    firstname,
-    lastname,
-    email,
-    phone,
-    datetime: serverTimestamp()
-  }).then(() => {
-    alert("Thank you for registering!");
-  registerForm.reset();
-    document.querySelectorAll('.input-group').forEach(group => {
-      group.classList.remove('input-valid', 'input-invalid');
+      const isFirstNameValid = validateField("firstName", v => v.length > 0, "First name is required.");
+      const isLastNameValid = validateField("lastName", v => v.length > 0, "Last name is required.");
+      const isEmailValid = validateField("email", v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), "Invalid email address.");
+      const isPhoneValid = validateField("phone", v => /^[0-9]{10}$/.test(v), "Phone must be 10 digits.");
+
+      if (isFirstNameValid && isLastNameValid && isEmailValid && isPhoneValid) {
+        // submitToFirebase();
+
+        testForm()
+      }
     });
-  }).catch((error) => {
-    console.error("Error submitting form: ", error);
-    alert("Registration failed.");
-  });
+
+
+
+function testForm(){
+  alert("Form Was Submited");
+  console.log("Form Was Submited")
 }
 
+    function submitToFirebase() {
+      const firstname = document.getElementById("firstName").value.trim();
+      const lastname = document.getElementById("lastName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      addDoc(collection(db, "clients"), {
+        firstname,
+        lastname,
+        email,
+        phone,
+        datetime: serverTimestamp()
+      }).then(() => {
+        alert("Thank you for registering with Driving School!");
+        registerForm.reset();
+        document.querySelectorAll('.input-group').forEach(group => {
+          group.classList.remove('input-valid', 'input-invalid');
+        });
+      }).catch((error) => {
+        console.error("Error submitting form: ", error);
+        alert("Submission failed.");
+      });
+    }
 
 
-registerForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-
-
-  let valid = true;
-
-
-const checkmarkIcon = document.querySelector("#firstNameGroup .checkmark-icon");
-const lastNameCheck = document.getElementById("lastNameCheck");
-const emailCheck = document.getElementById("emailCheck");
-const phoneCheck = document.getElementById("phoneCheck");
-  //Name Validation
-  const name = document.getElementById("firstName");
-  const nameError = document.getElementById('firstNameError');
-
-
-
-
-  if(name.value.trim().length < 2){
-    nameError.textContent = "Name must be at least 2 characters.";
-    valid = false;
-    checkmarkIcon.classList.remove("visible");
-  }else{
-    nameError.textContent = "";
-    checkmarkIcon.classList.add("visible");
   }
 
-//last name Validation
-const lastName = document.getElementById('lastName');
-const lastError = document.getElementById('lastNameError')
+  // Reusable field validation function
+  function validateField(id, testFn, errorMessage) {
+    const input = document.getElementById(id);
+    const value = input.value.trim();
+    const group = input.closest(".input-group");
 
-
-
-
-if(lastName.value.trim().length < 2){
-  lastError.textContent = "Last Name must be at least 2 characters."
-  valid = false;
-  lastNameCheck.classList.remove("visible");
-}else{
-lastError.textContent = "";
-
-lastNameCheck.classList.add("visible");
-}
-
-
-//Email Validation
-
-const email = document.getElementById('email');
-const emailError = document.getElementById('emailError');
-
-
-
-if(!email.validity.valid){
-  emailError.textContent = "Enter a valid email.";
-  valid= false;
-  emailCheck.classList.remove("visible");
-}else{
-  emailError.textContent = "";
-  emailCheck.classList.add("visible");
-}
-
-
-
-//Phone Validation
-const phone = document.getElementById('phone');
-const phoneError = document.getElementById('phoneError');
-const phoneRegex = /^\d{10}$/;
-
-
-if(!phoneRegex.test(phone.value)){
-
-  phoneError.textContent = "Phone must be 10 digits.";
-  valid = false;
-  phoneCheck.classList.remove("visible");
-}else{
-  phoneError.textContent="";
-  phoneCheck.classList.add("visible");
-}
-
-
-if(valid){
-  submitToFirebase();
-  // Hide all checkmarks after form reset
- document.querySelectorAll('.checkmark-icon').forEach(icon => {
-   icon.classList.remove('visible');
- });
-}
-
-
+    if (!testFn(value)) {
+      group?.classList.remove("input-valid");
+      group?.classList.add("input-invalid");
+      input.setCustomValidity(errorMessage);
+      return false;
+    } else {
+      group?.classList.remove("input-invalid");
+      group?.classList.add("input-valid");
+      input.setCustomValidity("");
+      return true;
+    }
+  }
 
 });
 
 
-
-            
-
-  }
 /*============================
       clients.html
 ==============================*/
