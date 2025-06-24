@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "clients.html";
       }
     });
-  }
+  
 
   /*============================
           register.html
@@ -90,12 +90,7 @@ function submitToFirebase() {
   });
 }
 
-
-
-
 const registerForm = document.getElementById('registerForm')
-
-
 
 registerForm.addEventListener("submit", (e) => {
   e.preventDefault();
