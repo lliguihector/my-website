@@ -65,132 +65,123 @@ document.addEventListener("DOMContentLoaded", () => {
   ==============================*/
   const registerForm = document.getElementById("registerForm");
 
-  if (registerForm) {
+if (registerForm) {
 
-//Method submits form data to firebase
-    function submitToFirebase() {
-      const firstname = document.getElementById("firstName").value.trim();
-      const lastname = document.getElementById("lastName").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-    
-      addDoc(collection(db, "clients"), {
-        firstname,
-        lastname,
-        email,
-        phone,
-        datetime: serverTimestamp()
-      }).then(() => {
-        alert("Thank you for registering!");
-      registerForm.reset();
-        document.querySelectorAll('.input-group').forEach(group => {
-          group.classList.remove('input-valid', 'input-invalid');
-        });
-      }).catch((error) => {
-        console.error("Error submitting form: ", error);
-        alert("Registration failed.");
-      });
-    }
-
-    registerForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-    
-    
-    
-      let valid = true;
-    
-    
+  // Validation functions
+  function validateFirstName() {
+    const name = document.getElementById("firstName");
+    const nameError = document.getElementById('firstNameError');
     const checkmarkIcon = document.querySelector("#firstNameGroup .checkmark-icon");
-    const lastNameCheck = document.getElementById("lastNameCheck");
-    const emailCheck = document.getElementById("emailCheck");
-    const phoneCheck = document.getElementById("phoneCheck");
-      //Name Validation
-      const name = document.getElementById("firstName");
-      const nameError = document.getElementById('firstNameError');
     
-    
-    
-    
-      if(name.value.trim().length < 2){
-        nameError.textContent = "Name must be at least 2 characters.";
-        valid = false;
-        checkmarkIcon.classList.remove("visible");
-      }else{
-        nameError.textContent = "";
-        checkmarkIcon.classList.add("visible");
-      }
-    
-    //last name Validation
-    const lastName = document.getElementById('lastName');
-    const lastError = document.getElementById('lastNameError')
-    
-    
-    
-    
-    if(lastName.value.trim().length < 2){
-      lastError.textContent = "Last Name must be at least 2 characters."
-      valid = false;
-      lastNameCheck.classList.remove("visible");
-    }else{
-    lastError.textContent = "";
-    
-    lastNameCheck.classList.add("visible");
+    if (name.value.trim().length < 2) {
+      nameError.textContent = "Name must be at least 2 characters.";
+      checkmarkIcon.classList.remove("visible");
+      return false;
+    } else {
+      nameError.textContent = "";
+      checkmarkIcon.classList.add("visible");
+      return true;
     }
-    
-    
-    //Email Validation
-    
+  }
+
+  function validateLastName() {
+    const lastName = document.getElementById('lastName');
+    const lastError = document.getElementById('lastNameError');
+    const lastNameCheck = document.getElementById("lastNameCheck");
+
+    if (lastName.value.trim().length < 2) {
+      lastError.textContent = "Last Name must be at least 2 characters.";
+      lastNameCheck.classList.remove("visible");
+      return false;
+    } else {
+      lastError.textContent = "";
+      lastNameCheck.classList.add("visible");
+      return true;
+    }
+  }
+
+  function validateEmail() {
     const email = document.getElementById('email');
     const emailError = document.getElementById('emailError');
-    
-    
-    
-    if(!email.validity.valid){
+    const emailCheck = document.getElementById("emailCheck");
+
+    if (!email.validity.valid) {
       emailError.textContent = "Enter a valid email.";
-      valid= false;
       emailCheck.classList.remove("visible");
-    }else{
+      return false;
+    } else {
       emailError.textContent = "";
       emailCheck.classList.add("visible");
+      return true;
     }
-    
-    
-    
-    //Phone Validation
+  }
+
+  function validatePhone() {
     const phone = document.getElementById('phone');
     const phoneError = document.getElementById('phoneError');
+    const phoneCheck = document.getElementById("phoneCheck");
     const phoneRegex = /^\d{10}$/;
-    
-    
-    if(!phoneRegex.test(phone.value)){
-    
+
+    if (!phoneRegex.test(phone.value)) {
       phoneError.textContent = "Phone must be 10 digits.";
-      valid = false;
       phoneCheck.classList.remove("visible");
-    }else{
-      phoneError.textContent="";
+      return false;
+    } else {
+      phoneError.textContent = "";
       phoneCheck.classList.add("visible");
+      return true;
     }
-    
-    
-    if(valid){
-      submitToFirebase();
-      // Hide all checkmarks after form reset
-     document.querySelectorAll('.checkmark-icon').forEach(icon => {
-       icon.classList.remove('visible');
-     });
-    }
-    
-    
-    
-    });
-
-
-
-
-
-
   }
+
+  // Attach blur event listeners
+  document.getElementById("firstName").addEventListener("blur", validateFirstName);
+  document.getElementById("lastName").addEventListener("blur", validateLastName);
+  document.getElementById("email").addEventListener("blur", validateEmail);
+  document.getElementById("phone").addEventListener("blur", validatePhone);
+
+  // Firebase submission function
+  function submitToFirebase() {
+    const firstname = document.getElementById("firstName").value.trim();
+    const lastname = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+
+    addDoc(collection(db, "clients"), {
+      firstname,
+      lastname,
+      email,
+      phone,
+      datetime: serverTimestamp()
+    }).then(() => {
+      alert("Thank you for registering!");
+      registerForm.reset();
+      document.querySelectorAll('.input-group').forEach(group => {
+        group.classList.remove('input-valid', 'input-invalid');
+      });
+      document.querySelectorAll('.checkmark-icon').forEach(icon => {
+        icon.classList.remove('visible');
+      });
+    }).catch((error) => {
+      console.error("Error submitting form: ", error);
+      alert("Registration failed.");
+    });
+  }
+
+  // Submit listener
+  registerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const valid =
+      validateFirstName() &&
+      validateLastName() &&
+      validateEmail() &&
+      validatePhone();
+
+    if (valid) {
+      submitToFirebase();
+    }
+  });
+}
 
  
 
