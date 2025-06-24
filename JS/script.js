@@ -192,6 +192,18 @@ if (registerForm) {
       clients.html
 ==============================*/
 if (window.location.pathname.includes("clients.html")) {
+
+onAuthStateChanged(auth, (user) =>{
+
+if(!user){
+//Redirect or show a message 
+          window.location.href = "login.html";
+return;
+}
+
+
+
+          
   import("https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js").then(({ getDocs, collection }) => {
     const rowsPerPage = 8;
     let clientsData = [];
@@ -297,7 +309,8 @@ if (window.location.pathname.includes("clients.html")) {
         pagination.appendChild(btn);
       }
     }
-
+//Only load clients if authenticated
     loadClients();
   });
+       });     
 }
