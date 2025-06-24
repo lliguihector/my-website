@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Register Form</title>
+  <title>Student Registration</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link rel="stylesheet" href="CSS/style.css"/>
@@ -15,6 +15,19 @@
     padding: 0;
     background: url('images/background.jpg') no-repeat center center fixed;
     background-size: cover;
+  }
+
+  .error{
+    color:red;
+    font-size: 0.9em;
+    text-align: center;
+  }
+  input:invalid{
+    border-color:red;
+
+  }
+  input:valid{
+    border-color: green;
   }
 
 
@@ -37,6 +50,8 @@
 
   <div class="container  d-flex flex-column align-items-center justify-content-center ">
 
+
+
   <!-- <form class="form-wrapper p-4 border rounded shadow-sm bg-white" id="registerForm"> -->
   <form class="form-wrapper p-4" id="registerForm">
 
@@ -53,8 +68,10 @@
     <span class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3" >
       <i class="bi bi-check-circle-fill"></i>
     </span>
+
   </div>
-    <div class="error-message" id="firstNameError">First name is required.</div>
+  <!-- Error -->
+  <div class="error" id="firstNameError"></div>
     </div>
 
 
@@ -65,12 +82,13 @@
           <i class="bi bi-person-vcard form-icon"></i>
         </span>
         <input type="text" class="form-control border-start-0" id="lastName" placeholder="Last Name" required>
-        <span class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3">
+        <span id="lastNameCheck" class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3">
   <i class="bi bi-check-circle-fill"></i>
 </span>
 
       </div>
-        <div class="error-message" id="lastNameError">Last name is required.</div>
+      <!-- Error -->
+  <div class="error" id="lastNameError"></div>
     </div>
 
 <!-- Email -->
@@ -80,12 +98,13 @@
           <i class="bi bi-envelope form-icon"></i>
         </span>
         <input type="email" class="form-control border-start-0" id="email" placeholder="Email Address" required>
-        <span class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3">
+        <span id="emailCheck" class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3">
   <i class="bi bi-check-circle-fill"></i>
 </span>
 
       </div>
-      <div class="error-message" id="emailError">E-mail is required.</div>
+      <!-- Error -->
+<div class="error" id="emailError"></div>
     </div>
 
 <!-- Phone Number -->
@@ -94,16 +113,17 @@
         <span class="input-group-text bg-white border-end-0">
           <i class="bi bi-telephone form-icon"></i>
         </span>
-        <input type="tel" class="form-control border-start-0" id="phone" placeholder="Phone Number" required>
-        <span class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3">
+        <input type="tel" class="form-control border-start-0" id="phone" placeholder="Phone Number" required pattern="\d{10}" maxlength="10">
+        <span id="phoneCheck" class="checkmark-icon text-success position-absolute end-0 top-50 translate-middle-y pe-3">
   <i class="bi bi-check-circle-fill"></i>
 </span>
 
+</div>
+<!-- Error -->
+<div class="error" id="phoneError"></div>
       </div>
-      <div class="error-message" id="phoneError">Phone Number is required.</div>
-    </div>
 
-    <button type="submit" class="btn btn-primary w-100 mb-2">Submit</button>
+    <button type="submit" class="btn btn-primary w-100 mb-2">Register</button>
     <!-- Register Link -->
     <div class="text-center mt-3">
       <a href="login.html" class="text-decoration-none text-primary">Log in to view!</a>
