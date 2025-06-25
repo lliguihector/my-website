@@ -72,7 +72,7 @@ if (registerForm) {
     const name = document.getElementById("firstName");
     const nameError = document.getElementById('firstNameError');
     const checkmarkIcon = document.querySelector("#firstNameGroup .checkmark-icon");
-    
+
     if (name.value.trim().length < 2) {
       nameError.textContent = "Name must be at least 2 characters.";
       checkmarkIcon.classList.remove("visible");
@@ -106,7 +106,7 @@ if (registerForm) {
     const emailCheck = document.getElementById("emailCheck");
 
     if (!email.validity.valid) {
-      emailError.textContent = "Enter a valid email.";
+      emailError.textContent = "Enter a valid email address.";
       emailCheck.classList.remove("visible");
       return false;
     } else {
@@ -182,66 +182,72 @@ if (registerForm) {
     }
   });
 }
-
- 
-
-});
-
-
 /*============================
       clients.html
 ==============================*/
 if (window.location.pathname.includes("clients.html")) {
+  document.addEventListener("DOMContentLoaded", () => {
+    // Immediate auth check to prevent back-button access after logout
+    const user = auth.currentUser;
+    if (!user) {
+      window.location.replace("login.html"); // use replace to block back navigation
+      return;
+    }
 
-onAuthStateChanged(auth, (user) =>{
+    // Still listen for future auth state changes (e.g., token expiration)
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.replace("login.html");
+      }
+    });
 
-if(!user){
-//Redirect or show a message 
-          window.location.href = "login.html";
-return;
-}
-
-
-
-          
-  import("https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js").then(({ getDocs, collection }) => {
     const rowsPerPage = 8;
     let clientsData = [];
     let currentPage = 1;
 
     async function loadClients() {
-      const querySnapshot = await getDocs(collection(db, "clients"));
-      clientsData = [];
+      try {
+        const querySnapshot = await getDocs(collection(db, "clients"));
+        clientsData = [];
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const date = data.datetime?.toDate?.().toLocaleString?.() || "";
-        clientsData.push({
-          firstname: data.firstname || "",
-          lastname: data.lastname || "",
-          email: data.email || "",
-          phone: data.phone || "",
-          date: date
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const date = data.datetime?.toDate?.().toLocaleString?.() || "";
+          clientsData.push({
+            firstname: data.firstname || "",
+            lastname: data.lastname || "",
+            email: data.email || "",
+            phone: data.phone || "",
+            date: date
+          });
         });
-      });
-//Total Clients Number
-      document.getElementById("totalClients").textContent = `Total Sign-ins: ${clientsData.length}`;
-      renderTable();
-      renderPagination();
 
-
-//search Field
-      document.getElementById("searchInput").addEventListener("input", () => {
-        currentPage = 1;
+        document.getElementById("totalClients").textContent = `Total Sign-ins: ${clientsData.length}`;
         renderTable();
         renderPagination();
-      });
+
+        // Debounced search input (optional, improves performance)
+        const searchInput = document.getElementById("searchInput");
+        let debounceTimer;
+        searchInput.addEventListener("input", () => {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(() => {
+            currentPage = 1;
+            renderTable();
+            renderPagination();
+          }, 300); // 300ms delay
+        });
+
+      } catch (error) {
+        console.error("Error loading clients:", error);
+        alert("Failed to load client data.");
+      }
     }
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
       signOut(auth)
         .then(() => {
-          window.location.href = "login.html";
+          window.location.replace("login.html");
         })
         .catch((error) => {
           console.error("Logout error:", error);
@@ -286,7 +292,7 @@ return;
             <td>${data.lastname}</td>
             <td>${data.email}</td>
             <td>${data.phone}</td>
-            <td>${new Date(data.date).toLocaleDateString()}</td>
+            <td>${data.date}</td>
           </tr>`;
         tableBody.innerHTML += row;
       });
@@ -309,8 +315,14 @@ return;
         pagination.appendChild(btn);
       }
     }
-//Only load clients if authenticated
+
+    // Load data
     loadClients();
   });
-       });     
 }
+
+
+
+
+
+});
