@@ -31,6 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
   /*============================
             login.html
   ==============================*/
+
+const wasLoggedOut = sessionStorage.getItem("loggedOut");
+
+if(wasLoggedOut){
+alert("You've been loggged out successfully");
+sessionStorage.removeItem("loggedOut"); //clean up
+}
+
   const loginForm = document.querySelector("form#loginForm");
 
   if (loginForm) {
@@ -141,6 +149,8 @@ if (registerForm) {
 
   // Firebase submission function
   function submitToFirebase() {
+
+
     const firstname = document.getElementById("firstName").value.trim();
     const lastname = document.getElementById("lastName").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -155,150 +165,212 @@ if (registerForm) {
     }).then(() => {
       alert("Thank you for registering!");
       registerForm.reset();
-      document.querySelectorAll('.input-group').forEach(group => {
-        group.classList.remove('input-valid', 'input-invalid');
-      });
-      document.querySelectorAll('.checkmark-icon').forEach(icon => {
-        icon.classList.remove('visible');
-      });
+      window.location.href = "index.html";
+     
+
     }).catch((error) => {
       console.error("Error submitting form: ", error);
       alert("Registration failed.");
+      submitBtn.disabled = false;
     });
   }
+
+  const submitBtn = document.getElementById("submitBtn");
 
   // Submit listener
   registerForm.addEventListener("submit", (e) => {
     e.preventDefault();
+
+
+
+    
+    submitBtn.disabled = true; // 🔒 Disable button right away
+
+
 
     const valid =
       validateFirstName() &&
       validateLastName() &&
       validateEmail() &&
       validatePhone();
-
+  
     if (valid) {
       submitToFirebase();
+    } else {
+ 
+      submitBtn.disabled = false; // 🔓 Re-enable if validation failed
+     
     }
   });
+  
+
+
 }
 
-
-
-
-});
 
 
 /*============================
       clients.html
 ==============================*/
 if (window.location.pathname.includes("clients.html")) {
-  import("https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js").then(({ getDocs, collection }) => {
-    const rowsPerPage = 8;
-    let clientsData = [];
-    let currentPage = 1;
+  
 
-    async function loadClients() {
-      const querySnapshot = await getDocs(collection(db, "clients"));
-      clientsData = [];
+  const rowsPerPage = 8;
+  let clientsData = [];
+  let currentPage = 1;
+   let isLoggingOut = false;
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const date = data.datetime?.toDate?.().toLocaleString?.() || "";
-        clientsData.push({
-          firstname: data.firstname || "",
-          lastname: data.lastname || "",
-          email: data.email || "",
-          phone: data.phone || "",
-          date: date
-        });
+  //If user isnt loged in dont display table data
+onAuthStateChanged(auth,(user) =>{
+
+
+if(user){
+loadClients();
+}else{
+
+  if(!isLoggingOut){
+    alert("Please Login to view this page.");
+  }
+
+  window.location.href = "login.html";
+}
+
+});
+
+
+//Log out the user
+document.getElementById("logoutBtn").addEventListener("click", () => {
+
+  isLoggingOut = true;
+
+  signOut(auth)
+    .then(() => {
+      sessionStorage.setItem("loggedOut", "true"); //set flag
+      window.location.href = "login.html";
+    })
+    .catch((error) => {
+      console.error("Logout error:", error);
+      alert("Failed to logout: " + error.message);
+    });
+});
+
+//Load Database clients to view recent added outside of webpage refresh the page
+  async function loadClients() {
+    const querySnapshot = await getDocs(collection(db, "clients"));
+    clientsData = [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const date = data.datetime?.toDate?.().toLocaleString?.() || "";
+      clientsData.push({
+        firstname: data.firstname || "",
+        lastname: data.lastname || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        date: date
       });
+    });
 //Total Clients Number
-      document.getElementById("totalClients").textContent = `Total Sign-ins: ${clientsData.length}`;
-      renderTable();
-      renderPagination();
+    document.getElementById("totalClients").textContent = `Total Sign-ins: ${clientsData.length}`;
 
+    //Load data for the first time 
+    renderTable();
+    renderPagination();
+
+
+  }
 
 //search Field
-      document.getElementById("searchInput").addEventListener("input", () => {
+  const searchInput = document.getElementById("searchInput");
+
+  if (searchInput) {
+    let debounceTimeout;
+  
+    searchInput.addEventListener("input", () => {
+
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        // console.log("Search Input: ",searchInput.value);
         currentPage = 1;
         renderTable();
         renderPagination();
-      });
-    }
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth)
-        .then(() => {
-          window.location.href = "login.html";
-        })
-        .catch((error) => {
-          console.error("Logout error:", error);
-          alert("Failed to logout: " + error.message);
-        });
+        
+      }, 300); // 300ms debounce
     });
+  }
+  
 
-    function getFilteredData() {
-      const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-      return clientsData.filter(client =>
-        client.firstname.toLowerCase().includes(searchTerm) ||
-        client.lastname.toLowerCase().includes(searchTerm) ||
-        client.email.toLowerCase().includes(searchTerm) ||
-        client.phone.toLowerCase().includes(searchTerm)
-      );
+
+
+
+  function getFilteredData() {
+    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+    return clientsData.filter(client =>
+      client.firstname.toLowerCase().includes(searchTerm) ||
+      client.lastname.toLowerCase().includes(searchTerm) ||
+      client.email.toLowerCase().includes(searchTerm) ||
+      client.phone.toLowerCase().includes(searchTerm)
+    );
+  }
+
+
+
+
+
+  function renderTable() {
+    const tableBody = document.getElementById("clientTableBody");
+    tableBody.innerHTML = "";
+
+    const filtered = getFilteredData();
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const rowsToShow = filtered.slice(startIndex, endIndex);
+
+    if (rowsToShow.length === 0) {
+      const searchTerm = document.getElementById("searchInput").value.trim();
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center text-muted py-4">
+            No results found for "<strong>${searchTerm}</strong>"
+          </td>
+        </tr>`;
+      return;
     }
 
-    function renderTable() {
-      const tableBody = document.getElementById("clientTableBody");
-      tableBody.innerHTML = "";
+    rowsToShow.forEach(data => {
+      const row = `
+        <tr>
+          <td>${data.firstname}</td>
+          <td>${data.lastname}</td>
+          <td>${data.email}</td>
+          <td>${data.phone}</td>
+          <td>${new Date(data.date).toLocaleDateString()}</td>
+        </tr>`;
+      tableBody.innerHTML += row;
+    });
+  }
 
-      const filtered = getFilteredData();
-      const startIndex = (currentPage - 1) * rowsPerPage;
-      const endIndex = startIndex + rowsPerPage;
-      const rowsToShow = filtered.slice(startIndex, endIndex);
+  function renderPagination() {
+    const pagination = document.getElementById("paginationControls");
+    pagination.innerHTML = "";
 
-      if (rowsToShow.length === 0) {
-        const searchTerm = document.getElementById("searchInput").value.trim();
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="5" class="text-center text-muted py-4">
-              No results found for "<strong>${searchTerm}</strong>"
-            </td>
-          </tr>`;
-        return;
-      }
-
-      rowsToShow.forEach(data => {
-        const row = `
-          <tr>
-            <td>${data.firstname}</td>
-            <td>${data.lastname}</td>
-            <td>${data.email}</td>
-            <td>${data.phone}</td>
-            <td>${new Date(data.date).toLocaleDateString()}</td>
-          </tr>`;
-        tableBody.innerHTML += row;
+    const totalPages = Math.ceil(getFilteredData().length / rowsPerPage);
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement("button");
+      btn.textContent = i;
+      btn.className = `btn btn-sm mx-1 ${i === currentPage ? 'btn-primary' : 'btn-outline-primary'}`;
+      btn.addEventListener("click", () => {
+        currentPage = i;
+        renderTable();
+        renderPagination();
       });
+      pagination.appendChild(btn);
     }
+  }
 
-    function renderPagination() {
-      const pagination = document.getElementById("paginationControls");
-      pagination.innerHTML = "";
 
-      const totalPages = Math.ceil(getFilteredData().length / rowsPerPage);
-      for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-        btn.className = `btn btn-sm mx-1 ${i === currentPage ? 'btn-primary' : 'btn-outline-primary'}`;
-        btn.addEventListener("click", () => {
-          currentPage = i;
-          renderTable();
-          renderPagination();
-        });
-        pagination.appendChild(btn);
-      }
-    }
 
-    loadClients();
-  });
 }
+
+
+});
