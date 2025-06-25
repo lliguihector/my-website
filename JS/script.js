@@ -186,7 +186,7 @@ if (registerForm) {
       clients.html
 ==============================*/
 if (window.location.pathname.includes("clients.html")) {
-  document.addEventListener("DOMContentLoaded", () => {
+
     // Immediate auth check to prevent back-button access after logout
     const user = auth.currentUser;
     if (!user) {
@@ -318,7 +318,7 @@ if (window.location.pathname.includes("clients.html")) {
 
     // Load data
     loadClients();
-  });
+
 }
 
 
