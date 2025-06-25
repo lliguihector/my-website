@@ -213,7 +213,15 @@ if (registerForm) {
       clients.html
 ==============================*/
 if (window.location.pathname.includes("clients.html")) {
-  
+
+
+
+          window.addEventListener("pageshow", (event) => {
+  if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+    location.reload(); // Force reload when returning via back/forward
+  }
+});
+
 
   const rowsPerPage = 8;
   let clientsData = [];
