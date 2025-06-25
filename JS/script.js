@@ -182,72 +182,55 @@ if (registerForm) {
     }
   });
 }
+
+
+
+
+});
+
+
 /*============================
       clients.html
 ==============================*/
 if (window.location.pathname.includes("clients.html")) {
-
-    // Immediate auth check to prevent back-button access after logout
-    const user = auth.currentUser;
-    if (!user) {
-      window.location.replace("login.html"); // use replace to block back navigation
-      return;
-    }
-
-    // Still listen for future auth state changes (e.g., token expiration)
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.replace("login.html");
-      }
-    });
-
+  import("https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js").then(({ getDocs, collection }) => {
     const rowsPerPage = 8;
     let clientsData = [];
     let currentPage = 1;
 
     async function loadClients() {
-      try {
-        const querySnapshot = await getDocs(collection(db, "clients"));
-        clientsData = [];
+      const querySnapshot = await getDocs(collection(db, "clients"));
+      clientsData = [];
 
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          const date = data.datetime?.toDate?.().toLocaleString?.() || "";
-          clientsData.push({
-            firstname: data.firstname || "",
-            lastname: data.lastname || "",
-            email: data.email || "",
-            phone: data.phone || "",
-            date: date
-          });
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const date = data.datetime?.toDate?.().toLocaleString?.() || "";
+        clientsData.push({
+          firstname: data.firstname || "",
+          lastname: data.lastname || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          date: date
         });
+      });
+//Total Clients Number
+      document.getElementById("totalClients").textContent = `Total Sign-ins: ${clientsData.length}`;
+      renderTable();
+      renderPagination();
 
-        document.getElementById("totalClients").textContent = `Total Sign-ins: ${clientsData.length}`;
+
+//search Field
+      document.getElementById("searchInput").addEventListener("input", () => {
+        currentPage = 1;
         renderTable();
         renderPagination();
-
-        // Debounced search input (optional, improves performance)
-        const searchInput = document.getElementById("searchInput");
-        let debounceTimer;
-        searchInput.addEventListener("input", () => {
-          clearTimeout(debounceTimer);
-          debounceTimer = setTimeout(() => {
-            currentPage = 1;
-            renderTable();
-            renderPagination();
-          }, 300); // 300ms delay
-        });
-
-      } catch (error) {
-        console.error("Error loading clients:", error);
-        alert("Failed to load client data.");
-      }
+      });
     }
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
       signOut(auth)
         .then(() => {
-          window.location.replace("login.html");
+          window.location.href = "login.html";
         })
         .catch((error) => {
           console.error("Logout error:", error);
@@ -292,7 +275,7 @@ if (window.location.pathname.includes("clients.html")) {
             <td>${data.lastname}</td>
             <td>${data.email}</td>
             <td>${data.phone}</td>
-            <td>${data.date}</td>
+            <td>${new Date(data.date).toLocaleDateString()}</td>
           </tr>`;
         tableBody.innerHTML += row;
       });
@@ -316,13 +299,6 @@ if (window.location.pathname.includes("clients.html")) {
       }
     }
 
-    // Load data
     loadClients();
-
+  });
 }
-
-
-
-
-
-});
