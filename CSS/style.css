@@ -208,6 +208,17 @@ height: calc(100vh - 200px); /* Subtract the banner height */
     height: 120px;
   }
 
+.formErrorBanner{
+    display: none;
+    color: #721c24;
+    background-color:  #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+
+
   @media (max-width: 768px) {
     .logo-img {
       height: 70px; /* Smaller logo on tablets and below */
