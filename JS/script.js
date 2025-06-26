@@ -1,10 +1,11 @@
+
 /*============================
           FIREBASE
 ==============================*/
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, where} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 
 
@@ -74,6 +75,9 @@ sessionStorage.removeItem("loggedOut"); //clean up
   const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
+
+
+
 
   // Validation functions
   function validateFirstName() {
@@ -147,46 +151,104 @@ if (registerForm) {
   document.getElementById("email").addEventListener("blur", validateEmail);
   document.getElementById("phone").addEventListener("blur", validatePhone);
 
-  // Firebase submission function
-  function submitToFirebase() {
+  
+  function showFormErrorBanner(){
+    const banner = document.getElementById("formErrorBanner");
 
 
-    const firstname = document.getElementById("firstName").value.trim();
-    const lastname = document.getElementById("lastName").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
+    banner.style.display = "block";
+    banner.scrollIntoView({behavior: "smooth"});
 
-    addDoc(collection(db, "clients"), {
+    setTimeout(() =>{
+      banner.style.display = "none";
+    }, 5000);
+  }
+  
+
+// Check if user already exists
+async function checkIfUserExists(email, phone) {
+
+  const usersRef = collection(db, "clients");
+
+  try {
+    // Query by email
+    const emailQuery = query(usersRef, where("email", "==", email));
+    const emailSnap = await getDocs(emailQuery);
+
+    if (!emailSnap.empty) {
+      alert("User already registered with that email.");
+      return true;
+    }
+
+    // Query by phone
+    const phoneQuery = query(usersRef, where("phone", "==", phone));
+    const phoneSnap = await getDocs(phoneQuery);
+
+    if (!phoneSnap.empty) {
+      alert("User already registered with that phone number.");
+      return true;
+    }
+
+    // No existing user found
+    return false;
+
+  } catch (error) {
+    console.error("Error checking if user exists: ", error.code,error.message);
+    alert("An error occurred while checking user registration.");
+    return true; // Safe fallback to prevent duplicate registration
+  }
+}
+
+
+const submitBtn = document.getElementById("submitBtn");
+
+ 
+ // Firebase submission function
+async function submitToFirebase() {
+  const firstname = document.getElementById("firstName").value.trim();
+  const lastname = document.getElementById("lastName").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+
+  // Check if user already exists
+  try {
+    const userExists = await checkIfUserExists(email, phone);
+    
+    if (userExists) {
+   
+    if (submitBtn) submitBtn.disabled = false;
+      return; // Prevent the submission
+    }
+
+    // Proceed with Firebase submission
+    await addDoc(collection(db, "clients"), {
       firstname,
       lastname,
       email,
       phone,
       datetime: serverTimestamp()
-    }).then(() => {
-      alert("Thank you for registering!");
-      registerForm.reset();
-      window.location.href = "index.html";
-     
-
-    }).catch((error) => {
-      console.error("Error submitting form: ", error);
-      alert("Registration failed.");
-      submitBtn.disabled = false;
     });
+
+    alert("Thank you for registering!");
+    registerForm.reset();  // Make sure your form has id="registerForm"
+    window.location.href = "index.html";
+
+  } catch (error) {
+    console.error("Error submitting form: ", error);
+    alert("Registration failed.");
+    
+   
+    if (submitBtn) submitBtn.disabled = false;
   }
+}
 
-  const submitBtn = document.getElementById("submitBtn");
 
-  // Submit listener
+  //Action when submit button is pressed
   registerForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
 
-
-    
-    submitBtn.disabled = true; // 🔒 Disable button right away
-
-
+    if (submitBtn) submitBtn.disabled = true; // 🔒 Disable button right away
 
     const valid =
       validateFirstName() &&
@@ -194,34 +256,35 @@ if (registerForm) {
       validateEmail() &&
       validatePhone();
   
+
+      //If everything validated submit data to firestore DB
     if (valid) {
       submitToFirebase();
     } else {
- 
-      submitBtn.disabled = false; // 🔓 Re-enable if validation failed
-     
+
+      //Banner display if user still hasnt fixed issues
+  showFormErrorBanner()
+
+  if(submitBtn){
+ submitBtn.disabled = false; // 🔓 Re-enable if validation failed
+  } 
     }
   });
-  
-
 
 }
-
-
 
 /*============================
       clients.html
 ==============================*/
 if (window.location.pathname.includes("clients.html")) {
+  
 
-
-
-          window.addEventListener("pageshow", (event) => {
-  if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
-    location.reload(); // Force reload when returning via back/forward
-  }
-});
-
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+      location.reload(); // Force reload when returning via back/forward
+    }
+  });
+  
 
   const rowsPerPage = 8;
   let clientsData = [];
@@ -322,9 +385,6 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
   }
 
 
-
-
-
   function renderTable() {
     const tableBody = document.getElementById("clientTableBody");
     tableBody.innerHTML = "";
@@ -382,3 +442,5 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 
 
 });
+
+
