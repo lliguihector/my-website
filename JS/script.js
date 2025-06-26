@@ -209,14 +209,18 @@ async function submitToFirebase() {
   const lastname = document.getElementById("lastName").value.trim();
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
+  const spinner = document.getElementById("spinner");
 
   // Check if user already exists
   try {
+
+  if(spinner) spinner.classList.remove("d-none");
     const userExists = await checkIfUserExists(email, phone);
     
     if (userExists) {
    
     if (submitBtn) submitBtn.disabled = false;
+if(spinner) spinner.classList.add("d-none");
       return; // Prevent the submission
     }
 
@@ -231,7 +235,8 @@ async function submitToFirebase() {
 
     alert("Thank you for registering!");
     registerForm.reset();  // Make sure your form has id="registerForm"
-    window.location.href = "index.html";
+
+   if(spinner) spinner.classList.add("d-none"); window.location.href = "index.html";
 
   } catch (error) {
     console.error("Error submitting form: ", error);
@@ -239,6 +244,7 @@ async function submitToFirebase() {
     
    
     if (submitBtn) submitBtn.disabled = false;
+if(spinner) spinner.classList.add("d-none");
   }
 }
 
