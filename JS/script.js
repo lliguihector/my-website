@@ -211,20 +211,33 @@ async function submitToFirebase() {
   const phone = document.getElementById("phone").value.trim();
   const spinner = document.getElementById("spinner");
 
-  // Check if user already exists
-  try {
+  if (!navigator.onLine) {
+    alert("You are offline. Please check your connection before submitting.");
+    if (submitBtn) submitBtn.disabled = false;
+    if (spinner) spinner.classList.add("d-none");
+    return;
+  }
 
-  if(spinner) spinner.classList.remove("d-none");
+  try {
+    if (spinner) spinner.classList.remove("d-none");
+
     const userExists = await checkIfUserExists(email, phone);
     
+    // If the check failed due to network issues, treat as block
     if (userExists) {
-   
-    if (submitBtn) submitBtn.disabled = false;
-if(spinner) spinner.classList.add("d-none");
-      return; // Prevent the submission
+      if (submitBtn) submitBtn.disabled = false;
+      if (spinner) spinner.classList.add("d-none");
+      return;
     }
 
-    // Proceed with Firebase submission
+    // Double-check internet before final submission
+    if (!navigator.onLine) {
+      alert("Internet connection lost. Please reconnect and try again.");
+      if (submitBtn) submitBtn.disabled = false;
+      if (spinner) spinner.classList.add("d-none");
+      return;
+    }
+
     await addDoc(collection(db, "clients"), {
       firstname,
       lastname,
@@ -234,17 +247,21 @@ if(spinner) spinner.classList.add("d-none");
     });
 
     alert("Thank you for registering!");
-    registerForm.reset();  // Make sure your form has id="registerForm"
-
-   if(spinner) spinner.classList.add("d-none"); window.location.href = "index.html";
+    registerForm.reset();  // Ensure your form has id="registerForm"
+    if (spinner) spinner.classList.add("d-none");
+    window.location.href = "index.html";
 
   } catch (error) {
     console.error("Error submitting form: ", error);
-    alert("Registration failed.");
-    
-   
+
+    if (!navigator.onLine) {
+      alert("You're offline. Please try again when you reconnect.");
+    } else {
+      alert("Registration failed. Please try again.");
+    }
+
     if (submitBtn) submitBtn.disabled = false;
-if(spinner) spinner.classList.add("d-none");
+    if (spinner) spinner.classList.add("d-none");
   }
 }
 
