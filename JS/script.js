@@ -167,16 +167,27 @@ if (registerForm) {
 
 // Check if user already exists
 async function checkIfUserExists(email, phone) {
-
   const usersRef = collection(db, "clients");
 
   try {
+    // Check if online before querying
+    if (!navigator.onLine) {
+      alert("You're offline. Cannot verify user details.");
+      return true; // Block registration as a safety fallback
+    }
+
     // Query by email
     const emailQuery = query(usersRef, where("email", "==", email));
     const emailSnap = await getDocs(emailQuery);
 
     if (!emailSnap.empty) {
       alert("User already registered with that email.");
+      return true;
+    }
+
+    // Check again if internet is still online before second query
+    if (!navigator.onLine) {
+      alert("You're offline. Could not complete verification.");
       return true;
     }
 
@@ -193,12 +204,17 @@ async function checkIfUserExists(email, phone) {
     return false;
 
   } catch (error) {
-    console.error("Error checking if user exists: ", error.code,error.message);
-    alert("An error occurred while checking user registration.");
-    return true; // Safe fallback to prevent duplicate registration
+    console.error("Error checking if user exists:", error.code, error.message);
+
+    if (!navigator.onLine || error.code === 'unavailable') {
+      alert("Network issue. Please check your internet connection.");
+    } else {
+      alert("An error occurred while checking registration. Please try again.");
+    }
+
+    return true; // Block registration to avoid duplicates
   }
 }
-
 
 const submitBtn = document.getElementById("submitBtn");
 
