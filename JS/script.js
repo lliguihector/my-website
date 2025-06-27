@@ -423,7 +423,13 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
     );
   }
 
+//Format phone number function 
 
+
+function formatPhoneNumber(phone) {
+  if (!phone || phone.length !== 10) return phone;
+  return `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6)}`;
+}
   function renderTable() {
     const tableBody = document.getElementById("clientTableBody");
     tableBody.innerHTML = "";
@@ -445,12 +451,17 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
     }
 
     rowsToShow.forEach(data => {
+
+
+const formattedPhone = formatPhoneNumber(data.phone);
+
+
       const row = `
         <tr>
           <td>${data.firstname}</td>
           <td>${data.lastname}</td>
           <td>${data.email}</td>
-          <td>${data.phone}</td>
+          <td>${formattedPhone}</td>
           <td>${new Date(data.date).toLocaleDateString()}</td>
         </tr>`;
       tableBody.innerHTML += row;
