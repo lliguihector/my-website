@@ -1,6 +1,6 @@
 {
   "name": "Canesco Enterprise",
-  "short_name": "CS App",
+  "short_name": "Canesco App",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
