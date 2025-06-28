@@ -373,6 +373,7 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
       const data = doc.data();
       const date = data.datetime?.toDate?.().toLocaleString?.() || "";
       clientsData.push({
+        id: doc.id, // Add the Firestore document ID
         firstname: data.firstname || "",
         lastname: data.lastname || "",
         email: data.email || "",
@@ -463,7 +464,10 @@ const formattedPhone = formatPhoneNumber(data.phone);
           <td>${data.email}</td>
           <td>${formattedPhone}</td>
           <td>${new Date(data.date).toLocaleDateString()}</td>
-          <td><i class="bi bi-pencil-square"></i><i class="bi bi-trash"></i></td>
+          <td>
+          <i class="bi bi-pencil-square edit-icon" data-id="${data.id}"></i>
+          <i class="bi bi-trash delete-icon" data-id="${data.id}"></i>
+          </td>
         </tr>`;
       tableBody.innerHTML += row;
     });
