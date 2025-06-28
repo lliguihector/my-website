@@ -464,10 +464,20 @@ const formattedPhone = formatPhoneNumber(data.phone);
           <td>${data.email}</td>
           <td>${formattedPhone}</td>
           <td>${new Date(data.date).toLocaleDateString()}</td>
-          <td>
-          <i class="bi bi-pencil-square edit-icon" data-id="${data.id}"></i>
-          <i class="bi bi-trash delete-icon" data-id="${data.id}"></i>
-          </td>
+//           <td>
+//   <div class="action-icons">
+//     <i class="bi bi-pencil-square edit-icon" data-id="${data.id}" title="Edit"></i>
+//     <i class="bi bi-trash delete-icon" data-id="${data.id}" title="Delete"></i>
+//   </div>
+// </td>
+<td>
+  <button class="btn btn-sm btn-outline-primary edit-icon" data-id="${data.id}" title="Edit">
+    <i class="bi bi-pencil-square"></i>
+  </button>
+  <button class="btn btn-sm btn-outline-danger delete-icon" data-id="${data.id}" title="Delete">
+    <i class="bi bi-trash"></i>
+  </button>
+</td>
         </tr>`;
       tableBody.innerHTML += row;
     });
