@@ -5,7 +5,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, where} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, where, deleteDoc, doc , updateDoc} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 
 
@@ -425,12 +425,13 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
   }
 
 //Format phone number function 
-
-
 function formatPhoneNumber(phone) {
   if (!phone || phone.length !== 10) return phone;
   return `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6)}`;
 }
+
+
+
   function renderTable() {
     const tableBody = document.getElementById("clientTableBody");
     tableBody.innerHTML = "";
@@ -444,7 +445,7 @@ function formatPhoneNumber(phone) {
       const searchTerm = document.getElementById("searchInput").value.trim();
       tableBody.innerHTML = `
         <tr>
-          <td colspan="5" class="text-center text-muted py-4">
+          <td colspan="5" class="text-center text-muted py-4"><i class="bi bi-search me-2"></i>
             No results found for "<strong>${searchTerm}</strong>"
           </td>
         </tr>`;
@@ -459,11 +460,12 @@ const formattedPhone = formatPhoneNumber(data.phone);
 
       const row = `
         <tr>
-          <td>${data.firstname}</td>
-          <td>${data.lastname}</td>
+          <td>${data.firstname} ${data.lastname}</td>
           <td>${data.email}</td>
           <td>${formattedPhone}</td>
-          <td>${new Date(data.date).toLocaleDateString()}</td>
+          <td>${new Date(data.date).toLocaleDateString("en-US", {
+            month: "short", day: "numeric", year: "numeric"
+          })}</td>
           <td>
             <button class="btn btn-sm btn-outline-primary edit-icon" data-id="${data.id}" title="Edit"><i class="bi bi-pencil-square"></i></button>
             <button class="btn btn-sm btn-outline-danger delete-icon" data-id="${data.id}" title="Delete"> <i class="bi bi-trash"></i></button>
@@ -490,6 +492,115 @@ const formattedPhone = formatPhoneNumber(data.phone);
       pagination.appendChild(btn);
     }
   }
+
+
+//CREATE 
+
+
+//READ 
+
+
+//UPDATE BY ID
+// Populate edit modal on click
+let currentEditId = null;
+document.addEventListener("click", async (e) => {
+  if (e.target.closest(".edit-icon")) {
+    const btn = e.target.closest(".edit-icon");
+    currentEditId = btn.getAttribute("data-id");
+
+    // Find data from table row (you can also fetch from Firestore if needed)
+    const row = btn.closest("tr");
+    const fullName = row.children[0].textContent.trim().split(" ");
+    const email = row.children[1].textContent.trim();
+    const phone = row.children[2].textContent.trim();
+
+    // Prefill modal fields
+    document.getElementById("editFirstName").value = fullName[0] || "";
+    document.getElementById("editLastName").value = fullName[1] || "";
+    document.getElementById("editEmail").value = email;
+    document.getElementById("editPhone").value = phone;
+
+    // Show modal
+    const editModal = new bootstrap.Modal(document.getElementById("editModal"));
+    editModal.show();
+  }
+});
+
+// Handle save changes
+const editForm = document.getElementById("editForm");
+editForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if (!currentEditId) return;
+
+  const updatedData = {
+    firstname: document.getElementById("editFirstName").value.trim(),
+    lastname: document.getElementById("editLastName").value.trim(),
+    email: document.getElementById("editEmail").value.trim(),
+    phone: document.getElementById("editPhone").value.trim(),
+  };
+
+  try {
+    await updateDoc(doc(db, "clients", currentEditId), updatedData);
+
+    // Refresh table data
+    loadClients();
+
+    // Close modal
+    const modalEl = document.getElementById("editModal");
+    const editModalInstance = bootstrap.Modal.getInstance(modalEl);
+    editModalInstance.hide();
+
+    alert("Entry updated successfully.");
+  } catch (err) {
+    console.error("Update failed:", err);
+    alert("Failed to update record.");
+  }
+});
+
+
+
+
+// DELETE BY ID
+let idToDelete = null;
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".delete-icon")) {
+    const button = e.target.closest(".delete-icon");
+    idToDelete = button.getAttribute("data-id");
+
+    const deleteModal = new bootstrap.Modal(document.getElementById("deleteConfirmModal"));
+    deleteModal.show();
+  }
+});
+
+// Confirm delete logic
+document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
+  if (idToDelete) {
+    try {
+      await deleteDoc(doc(db, "clients", idToDelete));
+      alert("Succesfully deleted student.");
+
+
+      // Reload or re-render table
+      loadClients();
+    } catch (err) {
+      console.error("Failed to delete:", err);
+      alert("Error deleting record.");
+    }
+
+    // Close modal
+    const deleteModalEl = document.getElementById("deleteConfirmModal");
+    const modal = bootstrap.Modal.getInstance(deleteModalEl);
+    modal.hide();
+  }
+});
+
+
+
+
+
+
 
 
 
