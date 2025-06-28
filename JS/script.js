@@ -463,7 +463,7 @@ const formattedPhone = formatPhoneNumber(data.phone);
           <td>${data.email}</td>
           <td>${formattedPhone}</td>
           <td>${new Date(data.date).toLocaleDateString()}</td>
-          <td><i class="bi bi-trash"></i></td>
+          <td><i class="bi bi-pencil-square"></i><i class="bi bi-trash"></i></td>
         </tr>`;
       tableBody.innerHTML += row;
     });
