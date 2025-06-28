@@ -67,7 +67,7 @@
 
 <nav class="navbar navbar-light btn-white">
   <form class="d-flex flex-row-reverse ms-auto">
-    <button class="btn btn-outline-success" type="button">
+      <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#addStudentModal">
       <i class="bi bi-person-plus-fill"></i> Add New Student
     </button>
     <button class="btn btn-sm btn-outline-secondary me-2" type="button">
@@ -99,6 +99,47 @@
     </div>
   </div>
 
+
+ <!-- Add New Student Modal -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="addStudentForm">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="addStudentModalLabel">Add New Student</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="newFirstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="newFirstName" required>
+          </div>
+          <div class="mb-3">
+            <label for="newLastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="newLastName" required>
+          </div>
+          <div class="mb-3">
+            <label for="newEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="newEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="newPhone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="newPhone" required pattern="\d{10}">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
