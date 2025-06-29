@@ -173,6 +173,7 @@ async function checkIfUserExists(email, phone) {
     // Check if online before querying
     if (!navigator.onLine) {
       alert("You're offline. Cannot verify user details.");
+      registerForm.reset();
       return true; // Block registration as a safety fallback
     }
 
@@ -182,12 +183,14 @@ async function checkIfUserExists(email, phone) {
 
     if (!emailSnap.empty) {
       alert("User already registered with that email.");
+      registerForm.reset();
       return true;
     }
 
     // Check again if internet is still online before second query
     if (!navigator.onLine) {
       alert("You're offline. Could not complete verification.");
+      registerForm.reset();        
       return true;
     }
 
@@ -197,6 +200,7 @@ async function checkIfUserExists(email, phone) {
 
     if (!phoneSnap.empty) {
       alert("User already registered with that phone number.");
+      registerForm.reset();
       return true;
     }
 
@@ -211,7 +215,7 @@ async function checkIfUserExists(email, phone) {
     } else {
       alert("An error occurred while checking registration. Please try again.");
     }
-
+    registerForm.reset();
     return true; // Block registration to avoid duplicates
   }
 }
