@@ -65,16 +65,24 @@
 </div>
 </div> 
 
+<-- Navigation Bar -->
 <nav class="navbar navbar-light btn-white">
   <form class="d-flex flex-row-reverse ms-auto">
+
+<-- Add Button -->
+
       <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#addStudentModal">
       <i class="bi bi-person-plus-fill"></i> Add Client
     </button>
    
+<-- Search Button -->
 
 <button class="btn btn-sm btn-outline-secondary me-2" type="button" data-bs-toggle="modal" data-bs-target="#filterModal">
 <i class="bi bi-search"></i> Search
 </button>
+
+
+<-- Filter Button -->
 
 <button type="button" class="btn btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#dateRangeModal">
  <i class="bi bi-filter-circle"></i> Filter
@@ -142,6 +150,38 @@
     </div>
   </div>
 </div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="dateRangeModal" tabindex="-1" aria-labelledby="dateRangeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dateRangeModalLabel">Select Date Range</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="dateRangeForm">
+          <div class="mb-3">
+            <label for="startDate" class="form-label">From</label>
+            <input type="date" class="form-control" id="startDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="endDate" class="form-label">To</label>
+            <input type="date" class="form-control" id="endDate" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Apply Filter</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 
 <!-- Search Modal (Bootstrap compatible) -->
