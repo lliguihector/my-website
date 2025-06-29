@@ -518,7 +518,55 @@ const formattedPhone = formatPhoneNumber(data.phone);
 //CREATE 
 
 
-//READ 
+//READ BY Query
+
+function toggleFilterModal() {
+  const modal = document.getElementById("filterModal");
+  modal.style.display = modal.style.display === "block" ? "none" : "block";
+}
+
+async function searchFirestore() {
+  const field = document.getElementById('searchField').value;
+  const value = document.getElementById('searchValue').value.trim();
+  const dateInput = document.getElementById('searchDate').value;
+
+  const db = firebase.firestore(); // or getFirestore() if using modular SDK
+
+  let q;
+  const ref = db.collection("clients");
+
+  if (dateInput) {
+    const start = new Date(dateInput);
+    const end = new Date(dateInput);
+    end.setHours(23, 59, 59, 999);
+
+    q = ref
+      .where("dateRegistered", ">=", start)
+      .where("dateRegistered", "<=", end)
+      .orderBy(field)
+      .startAt(value)
+      .endAt(value + "\uf8ff");
+  } else {
+    q = ref
+      .orderBy(field)
+      .startAt(value)
+      .endAt(value + "\uf8ff");
+  }
+
+  try {
+    const snapshot = await q.get();
+    const results = snapshot.docs.map(doc => doc.data());
+
+    renderTable(results); // Replace with your table rendering logic
+    toggleFilterModal();  // Close modal after search
+  } catch (err) {
+    console.error("Search error:", err);
+  }
+}
+
+
+
+
 
 
 //UPDATE BY ID
