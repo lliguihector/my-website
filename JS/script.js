@@ -466,7 +466,7 @@ function formatPhoneNumber(phone) {
       const searchTerm = document.getElementById("searchInput").value.trim();
       tableBody.innerHTML = `
         <tr>
-          <td colspan="5" class="text-center text-muted py-4"><i class="bi bi-search me-2"></i>
+          <td colspan="6" class="text-center text-muted py-4"><i class="bi bi-search me-2"></i>
             No results found for "<strong>${searchTerm}</strong>"
           </td>
         </tr>`;
@@ -481,6 +481,12 @@ const formattedPhone = formatPhoneNumber(data.phone);
 
       const row = `
         <tr>
+        <td>
+        <span class="custom-checkbox">
+        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+        <label for="checkbox1"></label>
+        </span>
+        </td>
           <td>${data.firstname} ${data.lastname}</td>
           <td>${data.email}</td>
           <td>${formattedPhone}</td>
