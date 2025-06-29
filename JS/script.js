@@ -164,6 +164,18 @@ if (registerForm) {
     }, 5000);
   }
   
+// Checkmark references 
+const checkmarkIcon = document.querySelector("#firstNameGroup .checkmark-icon");
+const lastNameCheck = document.getElementById("lastNameCheck");
+const emailCheck = document.getElementById("emailCheck");
+const phoneCheck = document.getElementById("phoneCheck");
+
+function resetCheckmark() {
+    checkmarkIcon.classList.remove("visible");
+    lastNameCheck.classList.remove("visible");
+    emailCheck.classList.remove("visible");
+    phoneCheck.classList.remove("visible");
+}
 
 // Check if user already exists
 async function checkIfUserExists(email, phone) {
@@ -173,6 +185,7 @@ async function checkIfUserExists(email, phone) {
     // Check if online before querying
     if (!navigator.onLine) {
       alert("You're offline. Cannot verify user details.");
+      resetCheckmark();
       registerForm.reset();
       return true; // Block registration as a safety fallback
     }
@@ -183,6 +196,7 @@ async function checkIfUserExists(email, phone) {
 
     if (!emailSnap.empty) {
       alert("User already registered with that email.");
+      resetCheckmark();   
       registerForm.reset();
       return true;
     }
@@ -190,6 +204,7 @@ async function checkIfUserExists(email, phone) {
     // Check again if internet is still online before second query
     if (!navigator.onLine) {
       alert("You're offline. Could not complete verification.");
+      resetCheckmark();
       registerForm.reset();        
       return true;
     }
@@ -200,6 +215,7 @@ async function checkIfUserExists(email, phone) {
 
     if (!phoneSnap.empty) {
       alert("User already registered with that phone number.");
+      resetCheckmark();
       registerForm.reset();
       return true;
     }
@@ -215,6 +231,7 @@ async function checkIfUserExists(email, phone) {
     } else {
       alert("An error occurred while checking registration. Please try again.");
     }
+    resetCheckmark();
     registerForm.reset();
     return true; // Block registration to avoid duplicates
   }
