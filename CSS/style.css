@@ -316,3 +316,11 @@ height: calc(100vh - 200px); /* Subtract the banner height */
   .input-invalid .error-message {
     display: block;
   }
+
+
+.card-overlay {
+  background: rgba(0,0,0,0.4);
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
