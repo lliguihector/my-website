@@ -586,8 +586,8 @@ document.addEventListener("click", async (e) => {
     // Find data from table row (you can also fetch from Firestore if needed)
     const row = btn.closest("tr");
     const fullName = row.children[1].textContent.trim().split(" ");
-    const email = row.children[3].textContent.trim();
-    const phone = row.children[4].textContent.trim();
+    const email = row.children[2].textContent.trim();
+    const phone = row.children[3].textContent.trim();
 
     // Prefill modal fields
     document.getElementById("editFirstName").value = fullName[0] || "";
