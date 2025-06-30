@@ -78,6 +78,20 @@ if (registerForm) {
 
 
 
+  function showSuccess(message) {
+    document.getElementById('successMessage').innerText = message;
+    document.getElementById('successCard').classList.remove('d-none');
+  }
+
+  function showError(message) {
+    document.getElementById('errorMessage').innerText = message;
+    document.getElementById('errorCard').classList.remove('d-none');
+  }
+
+  function hideCard(cardId) {
+    document.getElementById(cardId).classList.add('d-none');
+  }
+
 
   // Validation functions
   function validateFirstName() {
