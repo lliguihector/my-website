@@ -48,6 +48,17 @@
   
 </style>
 
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.5 11.5L3.5 8.5l1-1L6.5 9.5l4.5-4.5 1 1-5.5 5.5z"/>
+  </symbol>
+  <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M8 0c-.535 0-1.05.21-1.414.586L.586 6.586a2 2 0 0 0 0 2.828l6 6a2 2 0 0 0 2.828 0l6-6a2 2 0 0 0 0-2.828l-6-6A1.993 1.993 0 0 0 8 0zm.93 4.412a.5.5 0 0 1 .57.57l-.401 4.005a.5.5 0 0 1-.998 0l-.401-4.005a.5.5 0 0 1 .57-.57zm-.93 7.588a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z"/>
+  </symbol>
+</svg>
+
+
+
 </head>
 <body>
 
@@ -152,6 +163,36 @@
   </form>
 
 </div>
+
+<!-- Success Card -->
+
+<div class="card shadow-sm border-0 mb-3">
+  <div class="card-body">
+    <!-- Place the alert here -->
+<div class="alert alert-success d-flex align-items-center" role="alert">
+  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+    <use xlink:href="#check-circle-fill"/>
+  </svg>
+  <div>
+    ✅ Success! Your action was completed successfully.
+  </div>
+</div>
+</div>
+</div>
+
+
+
+<!-- Error Card -->
+
+<div class="alert alert-success d-flex align-items-center" role="alert">
+  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+    <use xlink:href="#check-circle-fill"/>
+  </svg>
+  <div>
+    ✅ Success! Your action was completed successfully.
+  </div>
+</div>
+
 <!-- Script Tag-->
 <script type="module" src="JS/script.js"></script>
 </body>
