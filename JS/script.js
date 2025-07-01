@@ -212,7 +212,8 @@ async function checkIfUserExists(email, phone) {
     const emailSnap = await getDocs(emailQuery);
 
     if (!emailSnap.empty) {
-      alert("User already registered with that email.");
+      // alert("User already registered with that email.");
+      showError("User already registered with that email."):
       resetCheckmark();   
       registerForm.reset();
       return true;
@@ -231,7 +232,8 @@ async function checkIfUserExists(email, phone) {
     const phoneSnap = await getDocs(phoneQuery);
 
     if (!phoneSnap.empty) {
-      alert("User already registered with that phone number.");
+      // alert("User already registered with that phone number.");
+      showError("User already registered with that phone number.");
       resetCheckmark();
       registerForm.reset();
       return true;
@@ -300,7 +302,8 @@ async function submitToFirebase() {
       datetime: serverTimestamp()
     });
 
-    alert("Thank you for registering!");
+    // alert("Thank you for registering!");
+    showSuccess("Thank you for registering!");
     registerForm.reset();  // Ensure your form has id="registerForm"
     if (spinner) spinner.classList.add("d-none");
     window.location.href = "index.html";
@@ -311,7 +314,8 @@ async function submitToFirebase() {
     if (!navigator.onLine) {
       alert("You're offline. Please try again when you reconnect.");
     } else {
-      alert("Registration failed. Please try again.");
+      // alert("Registration failed. Please try again.");
+      ShowError("Registration failed. Please try again.");
     }
 
     if (submitBtn) submitBtn.disabled = false;
