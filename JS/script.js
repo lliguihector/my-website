@@ -27,21 +27,54 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 //Globally accessible
+// window.showSuccess = function(message) {
+//   document.getElementById('successMessage').innerText = message;
+//   document.getElementById('successCard').classList.remove('d-none');
+//   document.getElementById('cardOverlay').classList.remove('d-none');
+// };
+
+// window.showError = function(message) {
+//   document.getElementById('errorMessage').innerText = message;
+//   document.getElementById('errorCard').classList.remove('d-none');
+//   document.getElementById('cardOverlay').classList.remove('d-none');
+// };
+
+// window.hideCard = function(cardId) {
+//   document.getElementById(cardId).classList.add('d-none');
+//   document.getElementById('cardOverlay').classList.add('d-none');
+// };
+
 window.showSuccess = function(message) {
-  document.getElementById('successMessage').innerText = message;
-  document.getElementById('successCard').classList.remove('d-none');
-  document.getElementById('cardOverlay').classList.remove('d-none');
+  const msg = document.getElementById('successMessage');
+  const card = document.getElementById('successCard');
+  const overlay = document.getElementById('cardOverlay');
+
+  if (!msg || !card || !overlay) return;
+
+  msg.innerText = message;
+  card.classList.remove('d-none');
+  overlay.classList.remove('d-none');
 };
 
 window.showError = function(message) {
-  document.getElementById('errorMessage').innerText = message;
-  document.getElementById('errorCard').classList.remove('d-none');
-  document.getElementById('cardOverlay').classList.remove('d-none');
+  const msg = document.getElementById('errorMessage');
+  const card = document.getElementById('errorCard');
+  const overlay = document.getElementById('cardOverlay');
+
+  if (!msg || !card || !overlay) return;
+
+  msg.innerText = message;
+  card.classList.remove('d-none');
+  overlay.classList.remove('d-none');
 };
 
 window.hideCard = function(cardId) {
-  document.getElementById(cardId).classList.add('d-none');
-  document.getElementById('cardOverlay').classList.add('d-none');
+  const card = document.getElementById(cardId);
+  const overlay = document.getElementById('cardOverlay');
+  if (card && overlay) {
+    card.classList.add('d-none');
+    overlay.classList.add('d-none');
+  }
 };
 
 
