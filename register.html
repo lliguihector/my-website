@@ -165,16 +165,21 @@
 </div>
 
 
-<button onclick="showSuccess('Client saved successfully!')" class="btn btn-outline-success">Test Success</button>
-<button onclick="showError('Unable to save client.')" class="btn btn-outline-danger">Test Error</button>
+
+
+<div class="d-flex gap-2 justify-content-center mt-4">
+  <button onclick="showSuccess('Client saved successfully!')" class="btn btn-outline-success">
+    Show Success Card
+  </button>
+  <button onclick="showError('Unable to save client. Please try again.')" class="btn btn-outline-danger">
+    Show Error Card
+  </button>
+</div>
 
 
 
-<!-- Centering container -->
-
-
-<div class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center z-3">
-
+<!-- Card Overlay (initially hidden) -->
+<div id="cardOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center z-3 d-none">
   <!-- Success Card -->
   <div id="successCard" class="card text-center shadow-sm d-none" style="width: 100%; max-width: 400px;">
     <div class="card-header bg-success text-white">
@@ -199,6 +204,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Script Tag-->
 <script type="module" src="JS/script.js"></script>
