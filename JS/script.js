@@ -213,7 +213,7 @@ async function checkIfUserExists(email, phone) {
 
     if (!emailSnap.empty) {
       // alert("User already registered with that email.");
-      showError("User already registered with that email."):
+      showError("User already registered with that email.");
       resetCheckmark();   
       registerForm.reset();
       return true;
@@ -315,7 +315,7 @@ async function submitToFirebase() {
       alert("You're offline. Please try again when you reconnect.");
     } else {
       // alert("Registration failed. Please try again.");
-      ShowError("Registration failed. Please try again.");
+      showError("Registration failed. Please try again.");
     }
 
     if (submitBtn) submitBtn.disabled = false;
