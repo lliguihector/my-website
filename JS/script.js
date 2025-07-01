@@ -26,7 +26,27 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Wait for DOM
+//Globally accessible
+window.showSuccess = function(message) {
+  document.getElementById('successMessage').innerText = message;
+  document.getElementById('successCard').classList.remove('d-none');
+  document.getElementById('cardOverlay').classList.remove('d-none');
+};
+
+window.showError = function(message) {
+  document.getElementById('errorMessage').innerText = message;
+  document.getElementById('errorCard').classList.remove('d-none');
+  document.getElementById('cardOverlay').classList.remove('d-none');
+};
+
+window.hideCard = function(cardId) {
+  document.getElementById(cardId).classList.add('d-none');
+  document.getElementById('cardOverlay').classList.add('d-none');
+};
+
+
+
+// Wait for DOM Content Loader 
 document.addEventListener("DOMContentLoaded", () => {
 
   /*============================
@@ -75,25 +95,6 @@ sessionStorage.removeItem("loggedOut"); //clean up
   const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
-
-//Toggle Success and error cards
-function showSuccess(message) {
-  document.getElementById('successMessage').innerText = message;
-  document.getElementById('successCard').classList.remove('d-none');
-  document.getElementById('cardOverlay').classList.remove('d-none');
-}
-
-function showError(message) {
-  document.getElementById('errorMessage').innerText = message;
-  document.getElementById('errorCard').classList.remove('d-none');
-  document.getElementById('cardOverlay').classList.remove('d-none');
-}
-
-function hideCard(cardId) {
-  document.getElementById(cardId).classList.add('d-none');
-  document.getElementById('cardOverlay').classList.add('d-none');
-}
-
 
   // Validation functions
   function validateFirstName() {
