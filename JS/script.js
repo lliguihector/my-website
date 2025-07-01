@@ -308,7 +308,11 @@ async function submitToFirebase() {
     showSuccess("Thank you for registering!");
     registerForm.reset();  // Ensure your form has id="registerForm"
     if (spinner) spinner.classList.add("d-none");
-    window.location.href = "index.html";
+  
+setTimeout(() => {
+  window.location.href = "index.html";
+}, 3000);
+
 
   } catch (error) {
     console.error("Error submitting form: ", error);
