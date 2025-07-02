@@ -311,7 +311,7 @@ async function submitToFirebase() {
   
 setTimeout(() => {
   window.location.href = "index.html";
-}, 3000);
+}, 2000);
 
 
   } catch (error) {
