@@ -403,20 +403,21 @@ function showToast(message, status = "success") {
   const toastEl = document.getElementById("genericToast");
   const toastBody = document.getElementById("toastBody");
   const toastIcon = document.getElementById("toastIcon");
+  const toastInner = document.getElementById("toastInner");
 
   // Set message
   toastBody.textContent = message;
 
   // Reset background and icon classes
-  toastEl.classList.remove("bg-success", "bg-danger");
-  toastIcon.className = "bi fs-4 me-2"; // Reset icon class
+  toastInner.classList.remove("bg-success", "bg-danger");
+  toastIcon.className = "bi fs-4"; // Reset icon
 
   // Set styles based on status
   if (status === "success") {
-    toastEl.classList.add("bg-success");
+    toastInner.classList.add("bg-success");
     toastIcon.classList.add("bi-check-circle-fill");
   } else if (status === "error") {
-    toastEl.classList.add("bg-danger");
+    toastInner.classList.add("bg-danger");
     toastIcon.classList.add("bi-x-circle-fill");
   }
 
