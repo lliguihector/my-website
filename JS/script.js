@@ -423,7 +423,7 @@ function showToast(message, status = "success") {
 
   // Show toast
   const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
-    delay: 4000,
+    delay: 2000,
     autohide: true,
   });
 
