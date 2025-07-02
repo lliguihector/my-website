@@ -720,7 +720,7 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async () =
       //alert("Succesfully deleted student.");
 
 // Success (green)
-showToast("Student successfully deleted", "success");
+showToast("Successfully deleted student.", "success");
 
 
       // Reload or re-render table
