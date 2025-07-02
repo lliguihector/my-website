@@ -399,35 +399,35 @@ loadClients();
 });
 
 //Generic toast toggle
+function showToast(message, status = "success") {
+  const toastEl = document.getElementById("genericToast");
+  const toastBody = document.getElementById("toastBody");
+  const toastIcon = document.getElementById("toastIcon");
 
-   function showToast(message, status = "success") {
-    const toastEl = document.getElementById("genericToast");
-    const toastBody = document.getElementById("toastBody");
+  // Set message
+  toastBody.textContent = message;
 
-    // Set message
-    toastBody.textContent = message;
+  // Reset background and icon classes
+  toastEl.classList.remove("bg-success", "bg-danger");
+  toastIcon.className = "bi fs-4 me-2"; // Reset icon class
 
-    // Reset background colors
-    toastEl.classList.remove("bg-success", "bg-danger");
-
-    // Set background color based on status
-    if (status === "success") {
-      toastEl.classList.add("bg-success");
-    } else if (status === "error") {
-      toastEl.classList.add("bg-danger");
-    }
-
-    // Show toast
-    const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
-      delay: 4000,
-      autohide: true,
-    });
-
-    toast.show();
+  // Set styles based on status
+  if (status === "success") {
+    toastEl.classList.add("bg-success");
+    toastIcon.classList.add("bi-check-circle-fill");
+  } else if (status === "error") {
+    toastEl.classList.add("bg-danger");
+    toastIcon.classList.add("bi-x-circle-fill");
   }
 
+  // Show toast
+  const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
+    delay: 4000,
+    autohide: true,
+  });
 
-
+  toast.show();
+}
 
 
 
