@@ -400,7 +400,7 @@ loadClients();
 
 //Generic toast toggle
 
-  function showToast(message, status = "success") {
+   function showToast(message, status = "success") {
     const toastEl = document.getElementById("genericToast");
     const toastBody = document.getElementById("toastBody");
 
