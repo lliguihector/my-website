@@ -366,6 +366,9 @@ setTimeout(() => {
 if (window.location.pathname.includes("clients.html")) {
   
 
+
+
+
   window.addEventListener("pageshow", (event) => {
     if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
       location.reload(); // Force reload when returning via back/forward
@@ -394,6 +397,39 @@ loadClients();
 }
 
 });
+
+//Generic toast toggle
+
+  function showToast(message, status = "success") {
+    const toastEl = document.getElementById("genericToast");
+    const toastBody = document.getElementById("toastBody");
+
+    // Set message
+    toastBody.textContent = message;
+
+    // Reset background colors
+    toastEl.classList.remove("bg-success", "bg-danger");
+
+    // Set background color based on status
+    if (status === "success") {
+      toastEl.classList.add("bg-success");
+    } else if (status === "error") {
+      toastEl.classList.add("bg-danger");
+    }
+
+    // Show toast
+    const toast = bootstrap.Toast.getOrCreateInstance(toastEl, {
+      delay: 4000,
+      autohide: true,
+    });
+
+    toast.show();
+  }
+
+
+
+
+
 
 
 //Log out the user
@@ -681,7 +717,10 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async () =
   if (idToDelete) {
     try {
       await deleteDoc(doc(db, "clients", idToDelete));
-      alert("Succesfully deleted student.");
+      //alert("Succesfully deleted student.");
+
+// Success (green)
+showToast("Student successfully deleted", "success");
 
 
       // Reload or re-render table
