@@ -391,9 +391,10 @@ loadClients();
 
   if(!isLoggingOut){
     alert("Please Login to view this page.");
+    window.location.href = "login.html";
   }
 
-  window.location.href = "login.html";
+  
 }
 
 });
@@ -435,17 +436,26 @@ function showToast(message, status = "success") {
 
 //Log out the user
 document.getElementById("logoutBtn").addEventListener("click", () => {
-
-  isLoggingOut = true;
+  const spinnerOverlay = document.getElementById("logoutSpinnerContainer");
+isLoggingOut = true;
+  // Show spinner
+  spinnerOverlay.classList.remove("d-none");
 
   signOut(auth)
     .then(() => {
-      sessionStorage.setItem("loggedOut", "true"); //set flag
-      window.location.href = "login.html";
+      sessionStorage.setItem("loggedOut", "true");
+
+      // ⏱️ Delay redirect by 1.5 seconds to show spinner
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1000); // Adjust milliseconds as needed (1000 = 1 second)
     })
     .catch((error) => {
       console.error("Logout error:", error);
       alert("Failed to logout: " + error.message);
+
+      // Hide spinner on failure
+      spinnerOverlay.classList.add("d-none");
     });
 });
 
