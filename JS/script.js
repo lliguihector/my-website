@@ -5,7 +5,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, where, deleteDoc, doc , updateDoc} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, where, deleteDoc, doc , updateDoc, orderBy} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 
 
@@ -451,7 +451,14 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 
 //Load Database clients to view recent added outside of webpage refresh the page
   async function loadClients() {
-    const querySnapshot = await getDocs(collection(db, "clients"));
+
+
+
+    const q = await query(collection(db, "clients"), orderBy("datetime","desc"));
+
+    const querySnapshot = await getDocs(q);
+
+
     clientsData = [];
 
     querySnapshot.forEach((doc) => {
@@ -583,9 +590,70 @@ const formattedPhone = formatPhoneNumber(data.phone);
       pagination.appendChild(btn);
     }
   }
+// ------------------------------  CRUD OPERATIONS ON FIRESTORE DB ------------------------------
+
+
+
+
+
+
+
 
 
 //CREATE 
+
+const addStudentForm = document.getElementById("addStudentForm");
+
+addStudentForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const saveBtn = document.getElementById("saveStudentBtn");
+  const spinner = document.getElementById("addSpinner");
+  const btnText = document.getElementById("addBtnText");
+
+  // Show loading spinner and change button text
+  spinner.classList.remove("d-none");
+  btnText.textContent = "Saving...";
+  saveBtn.disabled = true;
+
+  const newStudent = {
+    firstname: document.getElementById("newFirstName").value.trim(),
+    lastname: document.getElementById("newLastName").value.trim(),
+    email: document.getElementById("newEmail").value.trim(),
+    phone: document.getElementById("newPhone").value.trim(),
+    datetime: new Date(), // Optional: Add timestamp if needed
+  };
+
+  try {
+    await addDoc(collection(db, "clients"), newStudent);
+
+    // Success toast
+    showToast("Student added successfully.", "success");
+
+    // Reload or refresh data
+    loadClients();
+
+    // Reset form
+    addStudentForm.reset();
+
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById("addStudentModal"));
+    modal.hide();
+  } catch (err) {
+    console.error("Failed to add student:", err);
+    showToast("Failed to add student.", "error");
+  } finally {
+    // Reset UI
+    spinner.classList.add("d-none");
+    btnText.textContent = "Save Student";
+    saveBtn.disabled = false;
+  }
+});
+
+
+
+
+
 
 
 //READ BY Query
@@ -672,6 +740,22 @@ editForm.addEventListener("submit", async (e) => {
 
   if (!currentEditId) return;
 
+
+//Refrence button, and spinner elements
+const editBtn = document.getElementById("confirmEditBtn");
+const spinner = document.getElementById("editSpinner");
+const btnText = document.getElementById("editBtnText");
+
+
+//Show spinner, change text, and disable button 
+spinner.classList.remove("d-none");
+btnText.textContent = "Updating...";
+editBtn.disabled = true;
+
+
+
+
+
   const updatedData = {
     firstname: document.getElementById("editFirstName").value.trim(),
     lastname: document.getElementById("editLastName").value.trim(),
@@ -690,12 +774,25 @@ editForm.addEventListener("submit", async (e) => {
     const editModalInstance = bootstrap.Modal.getInstance(modalEl);
     editModalInstance.hide();
 
-    alert("Entry updated successfully.");
+    // alert("Entry updated successfully.");
+    showToast("Successfully updated student.","success");
   } catch (err) {
     console.error("Update failed:", err);
-    alert("Failed to update record.");
+    // alert("Failed to update record.");
+    showToast("Failed to update record.");
+  }finally{
+//Reset UI state 
+spinner.classList.add("d-none");
+btnText.textContent = "Save Changes";
+editBtn.disabled = false;
+
+
   }
 });
+
+
+
+
 
 
 
@@ -715,7 +812,23 @@ document.addEventListener("click", (e) => {
 
 // Confirm delete logic
 document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
+
+
+
   if (idToDelete) {
+
+//Refrence button, spinner, and text elements
+const deleteBtn = document.getElementById("confirmDeleteBtn");
+const spinner = document.getElementById("deleteSpinner");
+const btnText = document.getElementById("deleteBtnText");
+
+//Show spinner and change button text
+spinner.classList.remove("d-none");
+btnText.textContent = "Deleting...";
+deleteBtn.disabled = true;
+
+
+
     try {
       await deleteDoc(doc(db, "clients", idToDelete));
       //alert("Succesfully deleted student.");
@@ -729,12 +842,22 @@ showToast("Successfully deleted student.", "success");
     } catch (err) {
       console.error("Failed to delete:", err);
       alert("Error deleting record.");
-    }
+    }finally{
+//Reset button
+spinner.classList.add("d-none");
+btnText.textContent = "Delete";
+deleteBtn.disabled = false;
+
 
     // Close modal
     const deleteModalEl = document.getElementById("deleteConfirmModal");
     const modal = bootstrap.Modal.getInstance(deleteModalEl);
     modal.hide();
+
+      
+    }
+
+
   }
 });
 
